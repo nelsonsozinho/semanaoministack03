@@ -5,7 +5,7 @@ const routes = require('./routes');
 
 const server = express();
 
-mongoose.connect('mongodb+srv://alone:alone@cluster0-iwwge.mongodb.net/oministack8?retryWrites=true&w=majority', {
+mongoose.connect('mongodb://localhost:27017/oministack8', {
     useNewUrlParser: true
 })
 
