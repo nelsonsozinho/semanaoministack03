@@ -1,17 +1,33 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
+
 const routes = require('./routes');
 
-const server = express();
+const app = express();
+const server = require('http').Server(app);
+const io = require('socket.io')(server);
+
+const connectedUsers = {};
+
+io.on('connection', socket => {
+    const {user} = socket.handshake.query;
+    connectedUsers[user] = socker.io;
+});
 
 mongoose.connect('mongodb://localhost:27017/oministack8', {
     useNewUrlParser: true
 })
 
-server.use(cors());
-server.use(express.json())
-server.use(routes);
+app.use((req, resp, next) => {
+    req.io = io;
+    req.connectedUsers = connectedUsers;
+    return next();
+});
 
-server.listen(3333);
+app.use(cors());
+app.use(express.json())
+app.use(routes);
+
+app.listen(3333);
 
